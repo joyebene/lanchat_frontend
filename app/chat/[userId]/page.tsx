@@ -39,11 +39,9 @@ export default function ChatPage({ params }: { params: Promise<{ userId: string 
   const { user } = useAuth();
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [recipient, setRecipient] = useState<Recipient | null>(null);
+  const [roomId, setRoomId] = useState<string | null>(null);
 
   const { userId } = React.use(params);
-  
-
-  const roomId = userId; // Assuming the userId is the roomId for simplicity
 
   useEffect(() => {
     if (!userId) return;
@@ -60,6 +58,20 @@ export default function ChatPage({ params }: { params: Promise<{ userId: string 
     fetchRecipientData();
   }, [userId]);
 
+  // Effect to join a room and get the correct roomId
+  useEffect(() => {
+    if (!socket || !user || !userId) return;
+
+    const generatedRoomId =
+      [user.id, userId].sort().join('_');
+
+    setRoomId(generatedRoomId);
+
+    socket.emit('room:join', {
+      roomId: generatedRoomId,
+    });
+  }, [socket, user, userId]);
+
   useEffect(() => {
     if (!socket || !roomId) return;
 
@@ -67,12 +79,13 @@ export default function ChatPage({ params }: { params: Promise<{ userId: string 
       try {
         const { data } = await chatApi.getHistory(roomId);
         console.log(data);
-        
+
         setMessages(data);
       } catch (error) {
         console.error('Failed to fetch chat history:', error);
       }
     };
+
     fetchHistory();
 
     const handleNewMessage = (newMessage: Message) => {
@@ -206,8 +219,8 @@ export default function ChatPage({ params }: { params: Promise<{ userId: string 
     // Optional: emit a 'call:declined' event to notify the caller
   };
 
-  
-  
+
+
 
   if (callType) {
     return (
@@ -288,11 +301,10 @@ export default function ChatPage({ params }: { params: Promise<{ userId: string 
               className={`flex mb-4 ${msg.sender.id === user?.id ? 'justify-end' : 'justify-start'}`}
             >
               <div
-                className={`rounded-lg px-4 py-2 max-w-xs lg:max-w-md ${
-                  msg.sender.id === user?.id
-                    ? 'bg-(--accent) text-white'
-                    : 'bg-(--sidebar-bg)'
-                }`}
+                className={`rounded-lg px-4 py-2 max-w-xs lg:max-w-md ${msg.sender.id === user?.id
+                  ? 'bg-(--accent) text-white'
+                  : 'bg-(--sidebar-bg)'
+                  }`}
               >
                 <p className="font-bold text-sm">{msg.sender.username}</p>
                 <p>{msg.isMedia ? <a href={msg.content} target="_blank" rel="noopener noreferrer" className="text-blue-400 underline">View File</a> : msg.content}</p>
