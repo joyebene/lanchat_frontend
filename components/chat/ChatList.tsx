@@ -4,15 +4,21 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { userApi } from '@/lib/api';
 import { useAuth } from '@/contexts/AuthContext';
-import { Search } from 'lucide-react';
+import { Search, User, X } from 'lucide-react';
+import Image from 'next/image';
+
+interface ChatListProps {
+  setIsMenuOpen: (isOpen: boolean) => void;
+}
 
 interface User {
   id: string;
   username: string;
+  avatarUrl: string;
   email: string;
 }
 
-export default function ChatList() {
+export default function ChatList({ setIsMenuOpen }: ChatListProps) {
   const [users, setUsers] = useState<User[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const { user: currentUser } = useAuth();
@@ -36,9 +42,14 @@ export default function ChatList() {
     );
 
   return (
-    <div className="h-full overflow-y-auto flex flex-col bg-sidebar-bg border-r border-white/10">
+    <div className="h-full w-full md:w-72 overflow-y-auto flex flex-col bg-sidebar-bg border-r border-white/10">
+      <div className="p-4 border-b border-white/10 flex items-center justify-between">
+        <h2 className="text-xl font-bold">Chats</h2>
+        <button onClick={() => setIsMenuOpen(false)} className="md:hidden p-1">
+          {<X size={24} />}
+        </button>
+      </div>
       <div className="p-4 border-b border-white/10">
-        <h2 className="text-xl font-bold mb-4">Chats</h2>
         <div className="relative">
           <input
             type="text"
@@ -55,7 +66,18 @@ export default function ChatList() {
           <li key={user.id}>
             <Link href={`/chat/${user.id}`}>
               <div className="flex items-center p-4 hover:bg-white/5 cursor-pointer transition-colors">
-                <div className="w-12 h-12 bg-gray-600 rounded-full mr-4"></div>
+                <div className="relative w-12 h-12 bg-gray-700 rounded-full mr-4 flex items-center justify-center">
+                  {user.avatarUrl ? (
+                    <Image
+                      src={user.avatarUrl}
+                      alt={user.username}
+                      layout="fill"
+                      className="rounded-full object-cover"
+                    />
+                  ) : (
+                    <User size={24} className="text-gray-400" />
+                  )}
+                </div>
                 <div className="flex-1">
                   <h3 className="font-semibold">{user.username}</h3>
                   <p className="text-sm text-gray-400 truncate">

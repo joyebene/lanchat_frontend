@@ -22,7 +22,7 @@ export default function ProfilePage() {
     <ChatLayout showChatList={false} >
       <div className="flex flex-col h-full">
         {/* Header */}
-        <div className="shrink-0 bg-sidebar-bg border-b border-white/10 p-4 flex items-center justify-between">
+        <div className="shrink-0 bg-sidebar-bg border-b border-white/10 p-4 flex items-center justify-between overflow-x-hidden">
           <h2 className="text-xl font-bold text-foreground">My Profile</h2>
         </div>
 
@@ -30,14 +30,18 @@ export default function ProfilePage() {
         <div className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
           <div className="w-full max-w-md mx-auto bg-sidebar-bg border border-white/10 rounded-2xl shadow-lg p-8">
             <div className="flex flex-col items-center">
-              <div className="relative w-24 h-24 mb-4">
-                <Image
-                  src={user.avatar || '/default-avatar.png'}
-                  alt="User Avatar"
-                  layout="fill"
-                  className="rounded-full object-cover border-2 border-accent"
-                />
-              </div>
+              <div className="relative w-24 h-24 mb-4 flex items-center justify-center bg-background rounded-full border-2 border-accent">
+            {user.avatarUrl ? (
+              <Image
+                src={user.avatarUrl}
+                alt="User Avatar"
+                layout="fill"
+                className="rounded-full object-cover"
+              />
+            ) : (
+              <User size={48} className="text-gray-400" />
+            )}
+          </div>
               <h1 className="text-2xl font-bold text-foreground">{user.username}</h1>
               <p className="text-sm text-gray-400">{user.email}</p>
             </div>

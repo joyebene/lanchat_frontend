@@ -2,12 +2,14 @@
 
 import React, { useEffect, useState, useRef } from 'react';
 import { useSocket } from '@/contexts/SocketContext';
-import { chatApi, fileApi } from '@/lib/api';
+import { chatApi, fileApi, userApi } from '@/lib/api';
 import { useAuth } from '@/contexts/AuthContext';
 import ChatLayout from '@/components/chat/ChatLayout';
 import CallView from '@/components/call/CallView';
 import Link from 'next/link';
-import { ArrowLeft, Phone, Send, Video, Paperclip, PhoneIncoming, X } from 'lucide-react';
+import { ArrowLeft, Phone, Send, Video, Paperclip, PhoneIncoming, X, User } from 'lucide-react';
+import Image from 'next/image';
+
 interface Message {
   id: string;
   content: string;
@@ -17,6 +19,13 @@ interface Message {
   };
   createdAt: string;
   isMedia?: boolean;
+}
+
+interface Recipient {
+  id: string;
+  username: string;
+  avatarUrl?: string;
+  status: 'online' | 'offline' | 'away';
 }
 
 export default function ChatPage({ params }: { params: Promise<{ userId: string }>; }) {
@@ -29,11 +38,27 @@ export default function ChatPage({ params }: { params: Promise<{ userId: string 
   const { socket } = useSocket();
   const { user } = useAuth();
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const [recipient, setRecipient] = useState<Recipient | null>(null);
 
   const { userId } = React.use(params);
   
 
   const roomId = userId; // Assuming the userId is the roomId for simplicity
+
+  useEffect(() => {
+    if (!userId) return;
+
+    const fetchRecipientData = async () => {
+      try {
+        const response = await userApi.getUserById(userId);
+        setRecipient(response.data);
+      } catch (error) {
+        console.error('Failed to fetch recipient data:', error);
+      }
+    };
+
+    fetchRecipientData();
+  }, [userId]);
 
   useEffect(() => {
     if (!socket || !roomId) return;
@@ -189,7 +214,7 @@ export default function ChatPage({ params }: { params: Promise<{ userId: string 
       <ChatLayout>
         <CallView
           onEndCall={() => setCallType(null)}
-          contactName={`User ${userId}`}
+          contactName={recipient?.username || 'Loading...'}
           callType={callType}
           targetUserId={userId}
           isCaller={isCaller}
@@ -220,13 +245,24 @@ export default function ChatPage({ params }: { params: Promise<{ userId: string 
             <Link href="/dashboard">
               <ArrowLeft size={24} className="mr-4 md:hidden" />
             </Link>
-            <div className="w-10 h-10 bg-gray-500 rounded-full mr-4"></div>
+            <div className="relative w-10 h-10 bg-gray-700 rounded-full mr-3 flex items-center justify-center">
+              {recipient?.avatarUrl ? (
+                <Image
+                  src={recipient.avatarUrl}
+                  alt={recipient.username}
+                  layout="fill"
+                  className="rounded-full object-cover"
+                />
+              ) : (
+                <User size={20} className="text-gray-400" />
+              )}
+            </div>
             <div>
-              <h2 className="font-semibold">Chat with User {userId}</h2>
+              <h2 className="font-semibold">{recipient ? recipient.username : 'Loading...'}</h2>
               {typingUsername ? (
                 <p className="text-xs text-(--accent) animate-pulse">{typingUsername} is typing...</p>
               ) : (
-                <p className="text-xs text-gray-400">online</p>
+                <p className="text-xs text-gray-400">{recipient?.status || 'offline'}</p>
               )}
             </div>
           </div>

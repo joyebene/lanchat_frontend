@@ -8,9 +8,9 @@ export default function DashboardPage() {
 
   return (
     <ChatLayout>
-      <div className="flex-1 flex items-center justify-center text-center bg-[var(--chat-bg)]">
+      <div className="flex-1 flex items-center justify-center text-center bg-(--chat-bg) p-6">
         <div>
-          <h2 className="text-3xl font-bold">Welcome, {user?.username}</h2>
+          <h2 className="text-3xl font-bold text-(--foreground) break-all">Welcome, {user?.username}</h2>
           <p className="text-gray-400 mt-2">
             Select a chat to start messaging
           </p>

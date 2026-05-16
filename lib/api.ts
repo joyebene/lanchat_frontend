@@ -57,6 +57,7 @@ export const authApi = {
 export const userApi = {
   getProfile: () => api.get('/users/me'),
   getAllUsers: () => api.get('/users'),
+  getUserById: (id: string) => api.get(`/users/${id}`),
 };
 
 export const chatApi = {

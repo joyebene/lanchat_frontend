@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Menu } from 'lucide-react';
+import Header from '../layout/Header';
 import Sidebar from '../layout/Sidebar';
 import ChatList from './ChatList';
 
@@ -12,30 +12,23 @@ export default function ChatLayout({
 }: {
   children: React.ReactNode;
   showChatList?: boolean;
- }) {
+}) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <div className="flex h-screen bg-(--background) text-(--foreground)">
+    <div className="flex h-screen bg-(--background) text-(--foreground) overflow-x-hidden">
       <div
-        className={`md:flex ${
-          isMenuOpen ? 'flex' : 'hidden'
-        } md:shrink-0`}
+        className={`md:flex ${isMenuOpen ? 'flex' : 'hidden'
+          } md:shrink-0`}
       >
         <Sidebar />
-        {showChatList && <ChatList />}
+        {showChatList && <ChatList setIsMenuOpen={setIsMenuOpen} />}
       </div>
       <div className="flex-1 flex flex-col">
-        <div className="md:hidden p-4 bg-(--sidebar-bg) border-b border-white/10 flex items-center justify-between">
-          <h2 className="text-xl font-bold">
-            LanChat
-          </h2>
-          <Menu
-            size={30}
-            className="cursor-pointer"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          />
-        </div>
+        <Header
+          title="LanChat"
+          onMenuToggle={() => setIsMenuOpen(!isMenuOpen)}
+        />
         {children}
       </div>
     </div>
