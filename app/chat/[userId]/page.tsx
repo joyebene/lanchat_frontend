@@ -240,10 +240,10 @@ export default function ChatPage({ params }: { params: Promise<{ userId: string 
       )}
       <div className="flex flex-col h-full bg-(--chat-bg)">
         {/* Chat Header */}
-        <div className="flex items-center justify-between p-4 bg-(--sidebar-bg) border-b border-white/10">
+        <div className="flex items-center justify-between p-2 md:p-4 bg-(--sidebar-bg) border-b border-white/10">
           <div className="flex items-center">
             <Link href="/dashboard">
-              <ArrowLeft size={24} className="mr-4 md:hidden" />
+              <ArrowLeft size={24} className="mr-2 md:hidden" />
             </Link>
             <div className="relative w-10 h-10 bg-gray-700 rounded-full mr-3 flex items-center justify-center">
               {recipient?.avatarUrl ? (
@@ -258,7 +258,7 @@ export default function ChatPage({ params }: { params: Promise<{ userId: string 
               )}
             </div>
             <div>
-              <h2 className="font-semibold">{recipient ? recipient.username : 'Loading...'}</h2>
+              <h2 className="font-semibold break-all">{recipient ? recipient.username : 'Loading...'}</h2>
               {typingUsername ? (
                 <p className="text-xs text-(--accent) animate-pulse">{typingUsername} is typing...</p>
               ) : (
@@ -322,13 +322,13 @@ export default function ChatPage({ params }: { params: Promise<{ userId: string 
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               placeholder="Type a message"
-              className="w-full bg-(--chat-bg) border border-transparent focus:border-(--accent) focus:ring-2 focus:ring-(--accent)/30 transition-all rounded-full py-3 pl-6 pr-16 text-(--foreground) placeholder:text-gray-500 outline-none"
+              className="w-full bg-(--chat-bg) border border-transparent focus:border-(--accent) focus:ring-2 focus:ring-(--accent)/30 transition-all rounded-full py-2 md:py-3 pl-6 pr-16 text-(--foreground) placeholder:text-gray-500 outline-none"
               onKeyPress={(e) => e.key === 'Enter' && handleSend()}
             />
             <button
               title="send-btn"
               onClick={handleSend}
-              className="absolute right-3 top-1/2 -translate-y-1/2 p-2 bg-(--accent) rounded-full hover:bg-opacity-80"
+              className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 md:p-2 bg-(--accent) rounded-full hover:bg-opacity-80"
             >
               <Send size={20} />
             </button>

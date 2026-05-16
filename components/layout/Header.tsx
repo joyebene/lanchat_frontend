@@ -39,12 +39,6 @@ export default function Header({
 
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-2 ml-2 lg:hidden">
-            <Link href="/profile">
-              <div className="w-8 h-8 bg-(--accent) rounded-full flex items-center justify-center text-white text-sm font-semibold">
-                {user?.username?.charAt(0).toUpperCase() || 'U'}
-              </div>
-            </Link>
-
             <button
               onClick={onMenuToggle}
               className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
