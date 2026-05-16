@@ -1,12 +1,13 @@
 'use client';
 
 import { authApi } from '@/lib/api';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { createContext, useContext, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
 interface User {
   id: string;
+  email: string;
   username: string;
   avatar?: string;
   status: 'online' | 'offline' | 'away';
@@ -38,14 +39,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return null;
   });
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
-    // If the user state changes to null (e.g., after logout), redirect to login.
-    // This also handles the case where localStorage was cleared due to an error.
-    if (!user) {
+    const publicPaths = ['/', '/login', '/register'];
+    const isPublicPath = publicPaths.includes(pathname);
+
+    // If there's no user and the current path is not public, redirect to login.
+    if (!user && !isPublicPath) {
       router.push('/login');
     }
-  }, [user, router]);
+  }, [user, router, pathname]);
 
   const login = async (email: string, password: string) => {
     try {

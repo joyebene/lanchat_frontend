@@ -22,7 +22,7 @@ export default function Header({ title }: HeaderProps) {
             onClick={() => setShowMobileMenu(!showMobileMenu)}
             className="lg:hidden p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
           >
-            <Menu size={24} className="text-gray-600 dark:text-gray-400" />
+            {<Menu size={24} className="text-gray-600 dark:text-gray-400" />}
           </button>
           <h1 className="text-xl font-semibold text-gray-900 dark:text-white">{title}</h1>
         </div>
@@ -35,11 +35,11 @@ export default function Header({ title }: HeaderProps) {
             {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
           </button>
           <button className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg relative">
-            <Bell size={20} />
+            {<Bell size={20} />}
             <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
           </button>
           <div className="flex items-center gap-2 ml-2">
-            <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-sm font-semibold">
+            <div className="w-8 h-8 bg-linear-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-sm font-semibold">
               {user?.username?.charAt(0) || 'U'}
             </div>
           </div>

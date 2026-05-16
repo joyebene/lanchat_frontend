@@ -4,10 +4,15 @@ import { useState } from 'react';
 import { Menu } from 'lucide-react';
 import Sidebar from '../layout/Sidebar';
 import ChatList from './ChatList';
-import GroupList from './GroupList';
 
-export default function ChatLayout({ children }: { children: React.ReactNode }) {
-  const [view, setView] = useState('chat');
+
+export default function ChatLayout({
+  children,
+  showChatList = true,
+}: {
+  children: React.ReactNode;
+  showChatList?: boolean;
+ }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
@@ -17,8 +22,8 @@ export default function ChatLayout({ children }: { children: React.ReactNode }) 
           isMenuOpen ? 'flex' : 'hidden'
         } md:shrink-0`}
       >
-        <Sidebar setView={setView} view={view} />
-        {view === 'chat' ? <ChatList /> : <GroupList />}
+        <Sidebar />
+        {showChatList && <ChatList />}
       </div>
       <div className="flex-1 flex flex-col">
         <div className="md:hidden p-4 bg-(--sidebar-bg) border-b border-white/10 flex items-center justify-between">

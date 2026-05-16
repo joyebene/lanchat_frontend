@@ -41,6 +41,8 @@ export default function ChatPage({ params }: { params: Promise<{ userId: string 
     const fetchHistory = async () => {
       try {
         const { data } = await chatApi.getHistory(roomId);
+        console.log(data);
+        
         setMessages(data);
       } catch (error) {
         console.error('Failed to fetch chat history:', error);

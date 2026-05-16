@@ -11,6 +11,7 @@ import {
 import Link from 'next/link';
 import Input from '@/components/ui/Input';
 import Button from '@/components/ui/Button';
+import Image from 'next/image';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -31,11 +32,11 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-(--background) flex items-center justify-center px-4 relative overflow-hidden">
       
-      <div className="w-full max-w-md relative z-10">
+      <div className="w-full max-w-lg relative z-10">
         {/* Top Branding */}
         <div className="text-center mb-8">
           <div className="w-20 h-20 rounded-full bg-(--accent) flex items-center justify-center mx-auto shadow-lg shadow-(--accent)/40">
-            <MessageCircle size={40} className="text-(--foreground)" />
+            <Image src="/lan-logo.jpeg" alt="Lanchat" width={50} height={50} className="text-(--foreground) rounded-full" />
           </div>
 
           <h1 className="text-4xl font-bold text-(--foreground) mt-5 tracking-tight">

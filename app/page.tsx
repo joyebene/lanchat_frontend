@@ -2,7 +2,8 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { MessageCircle, Wifi, Shield } from 'lucide-react';
+import { Wifi, Shield } from 'lucide-react';
+import Image from 'next/image';
 
 export default function SplashScreen() {
   const router = useRouter();
@@ -10,15 +11,18 @@ export default function SplashScreen() {
   useEffect(() => {
     const timer = setTimeout(() => {
       router.push('/login');
-    }, 3000);
+    }, 20000);
     return () => clearTimeout(timer);
   }, [router]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background text-foreground">
       <div className="text-center animate-fade-in">
-        <div className="mb-8">
-          <MessageCircle size={80} className="text-accent mx-auto mb-4 animate-bounce" />
+        <div className="p-3 mb-8 mx-auto">
+           <div className="w-20 h-20 rounded-full bg-(--accent) flex items-center justify-center mx-auto shadow-lg shadow-(--accent)/40 mb-8">
+              <Image src="/lan-logo.jpeg" alt="Lanchat" width={50} height={50} className="text-(--foreground) rounded-full mx-auto" />
+          </div>
+         
           <h1 className="text-5xl font-bold text-accent mb-2">LANCHAT</h1>
           <p className="text-muted-foreground text-lg">Local Area Network Chat System</p>
         </div>
